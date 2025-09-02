@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Load Kuberhealthy run metadata from environment variables provided to the pod.
 UUID="${KH_RUN_UUID:-}"
 REPORT_URL="${KH_REPORTING_URL:-}"
-
 if [[ -z "$UUID" || -z "$REPORT_URL" ]]; then
   echo "KH_RUN_UUID and KH_REPORTING_URL must be set" >&2
   exit 1

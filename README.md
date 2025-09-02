@@ -1,8 +1,6 @@
-# Bash Client Example
+# Bash Check Example
 
-This directory demonstrates a minimal Kuberhealthy check written in Bash.
-
-The [`check.sh`](check.sh) script reads the Kuberhealthy run UUID and reporting URL from the `KH_RUN_UUID` and `KH_REPORTING_URL` environment variables that Kuberhealthy sets on checker pods. It then reports success or failure back to Kuberhealthy.
+This directory demonstrates a minimal Kuberhealthy check written in Bash. The [`check.sh`](check.sh) script reads the `KH_RUN_UUID` and `KH_REPORTING_URL` environment variables that Kuberhealthy sets on checker pods and exposes helper functions for reporting success or failure back to Kuberhealthy.
 
 ## Using the example
 
@@ -37,3 +35,5 @@ The [`check.sh`](check.sh) script reads the Kuberhealthy run UUID and reporting 
    ```
 
 When the pod runs, `check.sh` will report its result to Kuberhealthy. Set the `FAIL=true` environment variable to simulate a failure.
+
+You can copy `check.sh` into your own repository and adapt it to implement custom checks.
