@@ -1,14 +1,34 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Source the Kuberhealthy client library and initialize it.
-source "$(dirname "$0")/kuberhealthy-client.sh"
-kh::init
+UUID="${KH_RUN_UUID:-}"
+REPORT_URL="${KH_REPORTING_URL:-}"
+if [[ -z "$UUID" || -z "$REPORT_URL" ]]; then
+  echo "KH_RUN_UUID and KH_REPORTING_URL must be set" >&2
+  exit 1
+fi
+
+report_success() {
+  curl -sS -X POST \
+    -H "Content-Type: application/json" \
+    -H "kh-run-uuid: ${UUID}" \
+    -d '{"ok":true,"errors":[]}' \
+    "${REPORT_URL}"
+}
+
+report_failure() {
+  local msg="$1"
+  curl -sS -X POST \
+    -H "Content-Type: application/json" \
+    -H "kh-run-uuid: ${UUID}" \
+    -d '{"ok":false,"errors":["'"${msg}"'"]}' \
+    "${REPORT_URL}"
+}
 
 # Add your check logic here. For example purposes, this check reports success
 # unless the FAIL environment variable is set to "true".
 if [[ "${FAIL:-}" == "true" ]]; then
-  kh::report_failure "FAIL was set to true"
+  report_failure "FAIL was set to true"
 else
-  kh::report_success
+  report_success
 fi
